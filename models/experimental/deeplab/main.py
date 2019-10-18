@@ -89,7 +89,7 @@ flags.DEFINE_string(
     ('Train, or eval, or interleave train & eval.'))
 flags.DEFINE_integer('save_checkpoints_steps', 2000,
                      'Number of steps between checkpoint saves')
-flags.DEFINE_integer('keep_checkpoint_every_n_hours', 0.5,
+flags.DEFINE_integer('keep_checkpoint_every_n_hours', 1,
                      'Number of steps between checkpoint saves')
 flags.DEFINE_integer('keep_checkpoint_max', 20,
                      'Number of steps between checkpoint saves')
