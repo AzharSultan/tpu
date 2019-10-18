@@ -89,6 +89,10 @@ flags.DEFINE_string(
     ('Train, or eval, or interleave train & eval.'))
 flags.DEFINE_integer('save_checkpoints_steps', 2000,
                      'Number of steps between checkpoint saves')
+flags.DEFINE_integer('keep_checkpoint_every_n_hours', 0.5,
+                     'Number of steps between checkpoint saves')
+flags.DEFINE_integer('keep_checkpoint_max', 20,
+                     'Number of steps between checkpoint saves')
 flags.DEFINE_string('model_dir', None, 'Estimator model_dir')
 flags.DEFINE_string('init_checkpoint', None,
                     'Location of the checkpoint for seeding '
@@ -230,6 +234,8 @@ def main(unused_argv):
       cluster=tpu_cluster_resolver,
       model_dir=FLAGS.model_dir,
       save_checkpoints_steps=FLAGS.save_checkpoints_steps,
+      keep_checkpoint_max=FLAGS.keep_checkpoint_max,
+      keep_checkpoint_every_n_hours=FLAGS.keep_checkpoint_every_n_hours,
       tpu_config=tf.contrib.tpu.TPUConfig(
           iterations_per_loop=FLAGS.iterations_per_loop,
           num_shards=FLAGS.num_shards))
