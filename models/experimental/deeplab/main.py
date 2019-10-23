@@ -77,6 +77,8 @@ flags.DEFINE_string('optimizer', 'momentum',
                     'Optimizer to use.')
 flags.DEFINE_float('momentum', 0.9,
                    'momentum for momentum optimizer')
+flags.DEFINE_string('eval_checkpoint', '',
+                    'checkpoint to use for evaluation')
 # 8x num_shards to exploit TPU memory chunks.
 flags.DEFINE_integer('eval_batch_size', 8, 'Batch size for evaluation.')
 flags.DEFINE_integer('train_batch_size', 64, 'Batch size for training.')
@@ -185,9 +187,11 @@ def train_and_eval(deeplab_estimator, train_dataset, eval_dataset,
         is_training=False,
         model_variant=FLAGS.model_variant
     )
+    
     eval_results = deeplab_estimator.evaluate(
         input_fn=eval_input_fn,
-        steps=eval_dataset.num_samples // FLAGS.eval_batch_size
+        steps=eval_dataset.num_samples // FLAGS.eval_batch_size,
+        
     )
     tf.logging.info('Eval results: %s' % eval_results)
 
@@ -280,9 +284,11 @@ def main(unused_argv):
 
       tf.logging.info('Starting to evaluate.')
       try:
+        eval_checkpoint = None if not FLAGS.eval_checkpoint else FLAGS.model_dir+FLAGS.eval_checkpoint
         eval_results = deeplab_estimator.evaluate(
             input_fn=eval_input_fn,
-            steps=eval_dataset.num_samples // FLAGS.eval_batch_size
+            steps=eval_dataset.num_samples // FLAGS.eval_batch_size,
+            checkpoint_path=eval_checkpoint
         )
         tf.logging.info('Eval results: %s' % eval_results)
 
